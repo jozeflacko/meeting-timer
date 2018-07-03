@@ -25,7 +25,7 @@ export default new Vuex.Store({
     talkingPerson,
     persons,
     duration: 0,
-    timeLimit: '0h 1m 30s',
+    timeLimit: '0h 2m 30s',
   },
   mutations: {
     [CHANGE_PERSONS](state, persons: Person[]) {

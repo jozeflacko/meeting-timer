@@ -32,6 +32,7 @@
         :talkingPerson=talkingPerson 
         :setTalkingPerson=setTalkingPerson
         :removePerson=removePerson
+        :onlySetter=false
       />
     </div>
     <div class="add-person-container">
@@ -110,15 +111,15 @@ export default class StandUp extends Vue {
   }
 
   private clickFirebase(): void {
-   /*
+   
    const state:Status = {
-      talkingPerson: this.talkingPerson,
-      peopleArray: this.peopleArray,
+      talkingPerson:  this.$store.state.talkingPerson,
+      peopleArray: this.$store.state.persons,
       duration: this.duration,
       timeLimit: this.timeLimit,
     };    
     FirebaseService.sendInformation(state);
-    console.log(this.$store.state.status);*/
+    console.log(this.$store.state.status);
   }
 
   private addPerson() {

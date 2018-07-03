@@ -1,21 +1,22 @@
 <template>
   <div class="pool" 
     v-on:click="toggle()"
-    v-bind:class="{ active : person.talking }"
+    v-bind:class="{ active: person.talking, onlySetter: onlySetter===true }"
   >
     <img class="image" v-bind:src="person.image" />
     <div class="progress-container">      
       <span class="name">{{person.name}}</span>
-      <span class="time">
+      <span v-if="onlySetter === false" class="time">
         <span>{{currentTimeInHHmmss}}</span>
         <span class="overtime">{{overtimeTimeInHHmmss}}</span>
       </span>
-      <span 
+      <span v-if="onlySetter === false"
         v-bind:style="{width: currentTimeInPercentage, background: person.favoriteColor }"
         class="progress-bar"
       ></span>
     </div>
     <div 
+        v-if="onlySetter === false"
         class="remove" 
         v-on:click="(event)=> {removePool(person, event) }"
     >&times;</div>
@@ -36,6 +37,7 @@ export default class Pool extends Vue {
   @Prop() private talkingPerson!: Person;
   @Prop() private setTalkingPerson!: Function;
   @Prop() private removePerson!: Function;
+  @Prop() private onlySetter !: boolean; // in case of remote control
 
   private stopwatch = new Stopwatch();
   private personService = new PersonService();
@@ -114,6 +116,11 @@ export default class Pool extends Vue {
     height:40px;
     overflow:hidden;
   }
+  .pool.active.onlySetter {
+    background:#DDD;
+    outline:3px solid #777;
+  }
+
   .pool:hover {
     background:#eeeeeeb5;
   }
