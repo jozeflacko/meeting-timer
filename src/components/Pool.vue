@@ -11,7 +11,7 @@
         <span class="overtime">{{overtimeTimeInHHmmss}}</span>
       </span>
       <span v-if="onlySetter === false"
-        v-bind:style="{width: currentTimeInPercentage, background: person.favoriteColor }"
+        v-bind:style="{width: currentTimeInPercentage, backgroundColor: person.favoriteColor }"
         class="progress-bar"
       ></span>
     </div>
@@ -201,9 +201,34 @@ export default class Pool extends Vue {
     height:100%;
     width:0%;
     background:#fa8f8f;
-    transition:width 1s;
+    transition:all .1s;
   }
   .pool.active .progress-container .progress-bar {
     background:green;
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: inset 0 0px 0 rgba(0, 0, 0, 0.15);
+    transition: width 0.6s ease;
+    background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.5) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.5) 75%, transparent 75%, transparent);
+    background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.5) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.5) 75%, transparent 75%, transparent);
+    background-size: 40px 40px;
+    -webkit-animation: progress-bar-stripes 2s linear infinite;
+    animation: progress-bar-stripes 2s linear infinite;
+  }
+  @-webkit-keyframes progress-bar-stripes {
+    from {
+      background-position: 40px 0;
+    }
+    to {
+      background-position: 0 0;
+    }
+  }
+
+  @keyframes progress-bar-stripes {
+    from {
+      background-position: 40px 0;
+    }
+    to {
+      background-position: 0 0;
+    }
   }
 </style>

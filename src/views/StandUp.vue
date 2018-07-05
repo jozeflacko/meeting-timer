@@ -40,8 +40,7 @@
       <input v-model="newPersonName" title="Add Person"/>
       <button v-on:click="()=> {addPerson()}">+</button>
     </div>
-
-    <div v-on:click="clickFirebase()">test firebase</div>
+  
   </div>
 </template>
 

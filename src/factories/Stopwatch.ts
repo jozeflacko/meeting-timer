@@ -10,10 +10,10 @@ export default class Stopwatch {
         if (this.isRunning() === true) {
             throw new Error('Stopwatch already running');
         }
-        this.startTime = Date.now() - ( this.currentTimeInSeconds * 1000);
+        this.startTime = Date.now() - ( this.currentTimeInSeconds * 100);
         this.id = setInterval(() => {
             callback(this.getTime());           
-        }, 1000);
+        }, 100);
     }
 
     public stop() {
