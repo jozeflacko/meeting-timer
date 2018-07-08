@@ -5,15 +5,25 @@ export default class Stopwatch {
     private id: any = null;
     private startTime: number = 0;
     private currentTimeInSeconds: number = 0;
+    private REFRESH_TIME_EVERY_MILISECONDS = 500;
+
+    private secondsToMiliseconds(seconds) {
+        return seconds * 1000;
+    }
+
+    public setCurrentTimeInSeconds(seconds: number) {
+        this.currentTimeInSeconds = seconds;
+    }
 
     public start(callback: StopwatchCallback) {
         if (this.isRunning() === true) {
             throw new Error('Stopwatch already running');
         }
-        this.startTime = Date.now() - ( this.currentTimeInSeconds * 100);
+        const now = Date.now();
+        this.startTime = now - this.secondsToMiliseconds(this.currentTimeInSeconds);
         this.id = setInterval(() => {
             callback(this.getTime());           
-        }, 100);
+        }, this.REFRESH_TIME_EVERY_MILISECONDS);
     }
 
     public stop() {

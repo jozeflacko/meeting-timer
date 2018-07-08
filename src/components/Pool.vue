@@ -1,5 +1,5 @@
 <template>
-  <div class="pool" 
+  <div class="pool"
     v-on:click="toggle()"
     v-bind:class="{ active: person.talking, onlySetter: onlySetter===true }"
   >
@@ -15,6 +15,8 @@
         class="progress-bar"
       ></span>
     </div>
+
+    {{getActive()}}
     <div 
         v-if="onlySetter === false"
         class="remove" 
@@ -38,6 +40,7 @@ export default class Pool extends Vue {
   @Prop() private setTalkingPerson!: Function;
   @Prop() private removePerson!: Function;
   @Prop() private onlySetter !: boolean; // in case of remote control
+  @Prop() private sync !: Function;
 
   private stopwatch = new Stopwatch();
   private personService = new PersonService();
@@ -45,11 +48,12 @@ export default class Pool extends Vue {
   private toggle(): void {
     if (this.person.talking === false) {
       this.setTalkingPerson(this.person); 
-      this.startTalking(); 
+      this.startTalking();      
     } else {
       this.setTalkingPerson(PersonService.createPerson());
       this.stopTalking();
-    }
+    }   
+     this.sync();
   }
 
   private removePool(person: Person, event: Event) {
@@ -63,6 +67,7 @@ export default class Pool extends Vue {
   private updateCurrentTimeInSeconds(time: number): void {
     if (this.talkingPerson.name !== '' && this.talkingPerson.name === this.person.name) {
       this.personService.change(this.person, { ...this.person, currentTimeInSeconds: Number(time).toFixed(0) });
+      this.setTalkingPerson(this.person); // to update his running time
     } else {
       this.stopTalking();
     }
@@ -71,6 +76,8 @@ export default class Pool extends Vue {
   private startTalking() {
     if (this.stopwatch.isRunning() === false) {
       this.personService.change(this.person, { ...this.person, talking:  true });
+
+      this.stopwatch.setCurrentTimeInSeconds(Number(this.person.currentTimeInSeconds));
       this.stopwatch.start((time: number) => {
         this.updateCurrentTimeInSeconds(time);
       });
@@ -84,12 +91,22 @@ export default class Pool extends Vue {
     }
   }
 
-  private get currentTimeInHHmmss(): string {
-    return TimeUtils.getCurrentTimeInHHmmss(Number(this.person.currentTimeInSeconds), this.timeLimitInSeconds, true);
+  private getActive(): string {
+    if(this.person.talking === true && this.stopwatch.isRunning() === false) {
+      this.setTalkingPerson(this.person); 
+      this.startTalking();      
+    }
+    return '';
+  }
+
+  private get currentTimeInHHmmss(): string {    
+    const current = TimeUtils.getCurrentTimeInHHmmss(Number(this.person.currentTimeInSeconds), this.timeLimitInSeconds, true);
+    return current;
   }
 
   private get overtimeTimeInHHmmss(): string {    
-    return TimeUtils.getOvertimeInHHmmss(Number(this.person.currentTimeInSeconds), this.timeLimitInSeconds, true);
+    const overtime = TimeUtils.getOvertimeInHHmmss(Number(this.person.currentTimeInSeconds), this.timeLimitInSeconds, true);
+    return overtime;
   }
 
   private get currentTimeInPercentage(): string {
@@ -99,7 +116,7 @@ export default class Pool extends Vue {
       timeLimit = this.stopwatch.getTime();
       timeLimit = timeLimit / this.timeLimitInSeconds;
       timeLimit = timeLimit * 100;
-      return timeLimit.toFixed(0) + '%';
+      return timeLimit.toFixed(1) + '%';
     } 
     return '0%';
   }
@@ -123,6 +140,10 @@ export default class Pool extends Vue {
 
   .pool:hover {
     background:#eeeeeeb5;
+  }
+  .pool.active,
+  .pool.active:hover {
+    background:#ecececb5;
   }
   .pool .image {
     height:100%;
@@ -207,7 +228,7 @@ export default class Pool extends Vue {
     background:green;
     -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
     box-shadow: inset 0 0px 0 rgba(0, 0, 0, 0.15);
-    transition: width 0.6s ease;
+    transition: width 0.6s;
     background-image: -webkit-linear-gradient(45deg, rgba(255, 255, 255, 0.5) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.5) 75%, transparent 75%, transparent);
     background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.5) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0.5) 75%, transparent 75%, transparent);
     background-size: 40px 40px;

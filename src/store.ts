@@ -10,6 +10,7 @@ export const CHANGE_PERSONS = 'changepersons';
 export const CHANGE_TALKING_PERSON = 'changetalkingperson';
 export const CHANGE_DURATION = 'changeduration';
 export const CHANGE_TIME_LIMIT = 'changetimelimit';
+export const CHANGE_STORE = 'changestore';
 
 const talkingPerson: Person = {
   name: '',
@@ -25,7 +26,7 @@ export default new Vuex.Store({
     talkingPerson,
     persons,
     duration: 0,
-    timeLimit: '0h 2m 00s',
+    timeLimit: '2m 0s',
   },
   mutations: {
     [CHANGE_PERSONS](state, persons: Person[]) {
@@ -39,6 +40,12 @@ export default new Vuex.Store({
     },
     [CHANGE_TIME_LIMIT](state, timeLimit: string) {
       state.timeLimit = timeLimit;
+    },
+    [CHANGE_STORE](state, store: Status) {
+      state.persons = store.peopleArray;
+      state.talkingPerson = store.talkingPerson;
+      state.timeLimit = store.timeLimit;
+      state.duration = store.duration;
     },
   },
   actions: {

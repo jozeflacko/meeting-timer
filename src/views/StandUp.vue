@@ -1,27 +1,11 @@
 <template>
   <div class="container">
     <div class="overview-panel">
-      <div class="talking-general-settings-container">
-        <div class="time-limit">
-          <label>Time per Person</label>
-          <input v-model="timeLimit" placeholder="0h 1m 30s" class="time-per-person"/>
-        </div>
-
-        <div class="duration-container" >
-          <label>Duration</label>
-          <span            
-            class="duration"
-            title="Click to pause main Stopwatch"
-            v-on:click="pauseMainStopwatch()"
-          >
-            <span class="duration-timer">{{durationInHHmmss ? durationInHHmmss : '0h 0m 0s'}}</span>
-            <span v-if="talkingPerson.name === '' && mainStopwatch.isRunning() === false && mainStopwatch.getTime() > 0" class="paused">Paused</span>
-          </span>
-        </div>
-      </div>
       <HeadPool 
         :person=talkingPerson 
         :timeLimitInSeconds=timeLimitInSeconds 
+        :mainStopwatch=mainStopwatch
+        :setTalkingPerson=setTalkingPerson
       />
     </div>    
     <div class="pools">
@@ -33,6 +17,7 @@
         :setTalkingPerson=setTalkingPerson
         :removePerson=removePerson
         :onlySetter=false
+        :sync=sync
       />
     </div>
     <div class="add-person-container">
@@ -40,7 +25,11 @@
       <input v-model="newPersonName" title="Add Person"/>
       <button v-on:click="()=> {addPerson()}">+</button>
     </div>
-  
+    <button v-on:click="()=> {finish()}">Finish</button>
+
+    <button v-on:click="()=> {sync()}">Firebase</button>
+
+    <button v-on:click="()=> {resetApp()}">Reset</button>
   </div>
 </template>
 
@@ -73,9 +62,10 @@ export default class StandUp extends Vue {
   private newPersonName: string|null = null;
   private newPersonImage: string = '';
 
-  private mainStopwatch = new Stopwatch();
   private avatarUrl = 'img/avatars/1.png';
   private imageIndex = 0;
+
+  private mainStopwatch = new Stopwatch();
 
   private created() {
       this.newPersonImage = this.imageService.getNextImage();
@@ -85,15 +75,9 @@ export default class StandUp extends Vue {
     this.$store.commit(CHANGE_TALKING_PERSON, person);    
     this.startTalkingTimerWhenPerson(person);
   }
-
   private setDuration(time: number): void {
     this.$store.commit(CHANGE_DURATION, time);
   }
-/*
-  private setTimeLimit(timeLimit: string): void {
-    this.$store.commit(CHANGE_TIME_LIMIT, timeLimit);
-  }
-*/
   private startTalkingTimerWhenPerson(person): void {
     if (this.talkingPerson.name !== '') {
       if (this.mainStopwatch.isRunning() === false) {
@@ -103,22 +87,31 @@ export default class StandUp extends Vue {
       }
     } 
   }
-
   private removePerson(person: Person): void {
     this.personService.remove(person);
     this.setTalkingPerson(PersonService.createPerson());
   }
 
-  private clickFirebase(): void {
+  private sync(): void {
    
    const state:Status = {
       talkingPerson:  this.$store.state.talkingPerson,
       peopleArray: this.$store.state.persons,
-      duration: this.duration,
-      timeLimit: this.timeLimit,
+      duration: this.$store.state.duration,
+      timeLimit: this.$store.state.timeLimit,
     };    
     FirebaseService.sendInformation(state);
-    console.log(this.$store.state.status);
+  }
+
+  private resetApp(): void { 
+    this.personService.createDefaultPeople (); 
+    const state:Status = {
+      talkingPerson:  this.$store.state.talkingPerson,
+      peopleArray: this.$store.state.persons,
+      duration: this.$store.state.duration,
+      timeLimit: this.$store.state.timeLimit,
+    };    
+    FirebaseService.sendInformation(state);
   }
 
   private addPerson() {
@@ -133,17 +126,12 @@ export default class StandUp extends Vue {
     }
   }
 
-  private pauseMainStopwatch(): void {
-    if (this.mainStopwatch.isRunning() === true) {
-        this.mainStopwatch.stop();
-        this.setTalkingPerson(PersonService.createPerson());
-    }
+  private finish() {
+    alert();
   }
-
-  get timeLimit(): string {
-    return this.$store.state.timeLimit;
-  }
-
+  get talkingPerson(): Person {
+    return this.$store.state.talkingPerson;
+  }  
   get timeLimitInSeconds() {
     return TimeUtils.from_HHmmss_to_Seconds(this.$store.state.timeLimit, true);
   }
@@ -152,17 +140,7 @@ export default class StandUp extends Vue {
     return this.$store.state.persons;
   }
 
-  get talkingPerson(): Person {
-    return this.$store.state.talkingPerson;
-  }
 
-  get duration(): number {
-    return this.$store.state.duration;
-  }
-
-  get durationInHHmmss() {
-    return TimeUtils.from_Seconds_to_HHmmss(this.duration, true);
-  }
 }
 </script>
 
@@ -170,77 +148,24 @@ export default class StandUp extends Vue {
   .container {
     padding:2px;
     overflow:hidden;
+    
   }
   .overview-panel {
     margin-bottom:2px; 
-    position:relative;
-  }
-  .talking-general-settings-container {
-    font-weight: 400;
-    text-align: right;
-    position: absolute;
-    width: 100%;
-    right: 6px;
-    top: 8px;
-  }
-  .duration-container {
-    font-weight:400;
-    font-size:20px;
-  }
-  .duration-container label{
-    font-weight:800;
-    font-size:15px;
-    display:inline-block;
-    text-align:right;
-    vertical-align:top;
-    margin-left:5px;
-  }
-  .duration-container .duration {    
-    cursor: pointer;
-    display: inline-block;
-    width: 100px;
-    border: none;
-    margin: 0px;
-    vertical-align: top;
-    text-align: right;
-    padding-right: 5px;
-    background: #fefefe7d;
-    margin-left:5px;
-    color: #777;
-    cursor: default;
-  }
-  .duration .paused {
-    color:orange;
-      animation: blinker 2s linear infinite;
-  }   
-
-  @keyframes blinker {
-    50% {
-      opacity: 0;
-    }
-  }
-
-  .time-limit label {
-    font-size: 17px;
-    line-height: 17px;
-    display: inline-block;
-    font-weight: bold;
-    vertical-align:top;
-    margin-left:5px;
-  }
-  .time-limit input {
-    width: 100px;
-    display: inline-block;
-    font-weight: 400;
-    font-size: 20px;
-    padding-right: 5px;
-    margin-left: 5px;
-    background:#fefefe7d;
-    cursor: pointer;
-    text-align:right;
-    border:none;
-  }
-
+    position:fixed;
+    top:0px;
+    left:0px;
+    width:100%;
+    height:80px;
+    overflow:hidden;
+    z-index:1000;
+    background:#cde2ff;
+    box-shadow:2px 2px 7px #d1d1d1;
+  } 
+  .pools {
+    margin-top:80px;
+  } 
+  
   .add-person-container {
     height:40px;
     font-size:30px;
@@ -267,7 +192,7 @@ export default class StandUp extends Vue {
     border: none;
     background: white;
     outline: none;
-    text-align:right;
+    text-align:left;
     padding-right:5px;
   }
   .add-person-container button {

@@ -51,6 +51,7 @@ export default class TimeUtils {
 
         // round seconds
         seconds = Math.round(seconds * 100) / 100;
+        seconds = parseInt(seconds.toString(),10);
 
         let result: string = '';
         

@@ -1,5 +1,5 @@
 import firebase from 'firebase';
-import store from '../store';
+import store, { CHANGE_STORE } from '../store'; 
 
 export default class FirebaseService {
 
@@ -48,7 +48,7 @@ export default class FirebaseService {
 
         this.db.collection(FirebaseService.COLLECTION_NAME)
             .onSnapshot((snapshot) => {
-                FirebaseService.getValue(snapshot.docs[0].id);
+                FirebaseService.processSnapshot(snapshot.docs[0].id);
             });
     }
 
@@ -64,10 +64,19 @@ export default class FirebaseService {
             });
     }
 
-    private static getValue(id: string) {
+    private static processSnapshot(id: string) {
         this.db.collection(FirebaseService.COLLECTION_NAME).orderBy('added_at', 'desc').limit(1).get().then(function(snapshot) {
             snapshot.forEach((doc) => {
                 console.log(doc.id, '=>', doc.data());
+                const newStore = doc.data().payload;
+                store.commit(CHANGE_STORE, newStore);
+                
+                for(let p of newStore.peopleArray) {
+                    if(p.name === newStore.talkingPerson.name) {
+                        console.log(p.name);
+                    }
+                }
+                
             });
         });
     }
