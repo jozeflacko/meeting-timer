@@ -17,6 +17,9 @@ export default class FirebaseService {
     };
 
     public static init(): void {
+        
+        return; // do not use firebase
+        
         firebase.initializeApp(FirebaseService.config);
 
         firebase.auth().signInAnonymously().catch((error) => {
@@ -65,6 +68,9 @@ export default class FirebaseService {
     }
 
     private static processSnapshot(id: string) {
+        
+        return; // do not use firebase
+        
         this.db.collection(FirebaseService.COLLECTION_NAME).orderBy('added_at', 'desc').limit(1).get().then(function(snapshot) {
             snapshot.forEach((doc) => {
                 console.log(doc.id, '=>', doc.data());

@@ -11,7 +11,7 @@
             v-if="person.name === ''"
         />
         <div class="info">  
-          <h3>Stand-up for day: {{getToday()}}</h3>       
+          <h3>Today: {{getToday()}}</h3>       
           <div class="general-info">
             <div class="time-limit">
               <label>Time Limit for each of  <strong>{{numberOfParticipants}} participants</strong> is: </label>

@@ -25,11 +25,6 @@
       <input v-model="newPersonName" title="Add Person"/>
       <button v-on:click="()=> {addPerson()}">+</button>
     </div>
-    <button v-on:click="()=> {finish()}">Finish</button>
-
-    <button v-on:click="()=> {sync()}">Firebase</button>
-
-    <button v-on:click="()=> {resetApp()}">Reset</button>
   </div>
 </template>
 
@@ -44,7 +39,6 @@ import TimeUtils from '../utils/TimeUtils';
 import PersonService from '../services/PersonService';
 import ImageService from '../services/ImageService';
 import Person from '../interfaces/Person';
-import FirebaseService from '../services/FirebaseService';
 import Status from '../interfaces/Status';
 import { CHANGE_PERSONS, CHANGE_TALKING_PERSON, CHANGE_DURATION, CHANGE_TIME_LIMIT } from '../store';
 
@@ -135,12 +129,9 @@ export default class StandUp extends Vue {
   get timeLimitInSeconds() {
     return TimeUtils.from_HHmmss_to_Seconds(this.$store.state.timeLimit, true);
   }
-
   get personArray(): Person[] {
     return this.$store.state.persons;
   }
-
-
 }
 </script>
 
