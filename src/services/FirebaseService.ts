@@ -1,9 +1,12 @@
-import firebase from 'firebase';
+/*
+
+//import firebase from 'firebase';
 import store, { CHANGE_STORE } from '../store'; 
 
 export default class FirebaseService {
 
     private static COLLECTION_NAME = 'stand-up';
+ 
     private static userId: string|null = null;
     private static db: any;
 
@@ -20,7 +23,7 @@ export default class FirebaseService {
         
         return; // do not use firebase
         
-        firebase.initializeApp(FirebaseService.config);
+        //firebase.initializeApp(FirebaseService.config);
 
         firebase.auth().signInAnonymously().catch((error) => {
             // Handle Errors here.
@@ -46,7 +49,7 @@ export default class FirebaseService {
         this.db = firebase.firestore();   
         
         const firestore = firebase.firestore();
-        const settings = {/* your settings... */ timestampsInSnapshots: true};
+        const settings = { timestampsInSnapshots: true}; // your settings...
         firestore.settings(settings);
 
         this.db.collection(FirebaseService.COLLECTION_NAME)
@@ -87,3 +90,4 @@ export default class FirebaseService {
         });
     }
 }
+*/
