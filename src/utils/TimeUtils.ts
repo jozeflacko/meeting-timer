@@ -1,5 +1,24 @@
 export default class TimeUtils {
-    
+    public static fromTimeObjectToHHmmss(myTimeObject: {HH:string, mm: string, ss:string}): string {
+        let result = '00:';
+        if(myTimeObject.HH) {
+            result = myTimeObject.HH+':';
+        }
+        result += myTimeObject.mm+':';
+        result = myTimeObject.ss;
+     
+        return result;
+    }
+
+    public static fromNonNaturalHHmmssToTimeObject(hms: string): any {
+        const a = hms.split(':'); // split it at the colons
+        return {
+           HH: a[0],
+           mm: a[1],
+           ss: a[2],
+        }; 
+    }
+
     public static from_HHmmss_to_Seconds(hms: string, natural: boolean = false): number {
         
         if (hms === undefined) {

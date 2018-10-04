@@ -127,7 +127,7 @@ export default class StandUp extends Vue {
     return this.$store.state.talkingPerson;
   }  
   get timeLimitInSeconds() {
-    return TimeUtils.from_HHmmss_to_Seconds(this.$store.state.timeLimit, true);
+    return TimeUtils.from_HHmmss_to_Seconds(this.$store.state.timeLimit, false);
   }
   get personArray(): Person[] {
     return this.$store.state.persons;
@@ -138,7 +138,7 @@ export default class StandUp extends Vue {
 <style scoped lang="scss">
   .container {
     padding:2px;
-    overflow:hidden;
+    overflow:visible;
     
   }
   .overview-panel {
@@ -148,7 +148,7 @@ export default class StandUp extends Vue {
     left:0px;
     width:100%;
     height:80px;
-    overflow:hidden;
+    overflow:visible;
     z-index:1000;
     background:#cde2ff;
     box-shadow:2px 2px 7px #d1d1d1;

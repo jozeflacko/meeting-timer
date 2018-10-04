@@ -161,15 +161,15 @@ export default class Pool extends Vue {
     margin-left:40px;
   }
   .pool .progress-container .name {
-    display:block;
-    font-weight:800;
-    font-size:22px;
-    padding-left:2px;
-    overflow:hidden;
-    position:absolute;
-    top:1px;
-    left:2px;
-    z-index:20;
+    display: block;
+    font-weight: 800;
+    font-size: 22px;
+    padding-left: 2px;
+    overflow: hidden;
+    position: absolute;
+    top: -4px;
+    left: 1px;
+    z-index: 20;
   }
   .pool .progress-container .time {
     display:block;

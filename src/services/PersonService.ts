@@ -133,9 +133,8 @@ export default class PersonService {
         this.add('Jozef',       this.imageService.getImage(3));
         this.add('Fritz',       this.imageService.getImage(1));
         this.add('Inge',        this.imageService.getImage(9));
-        this.add('Emil',        this.imageService.getImage(2));
-        this.add('Hoda',        this.imageService.getImage(10));
-        this.add('AK',          this.imageService.getImage(6));
+        this.add('Abduaziz',        this.imageService.getImage(2));
+        this.add('Adrian',        this.imageService.getImage(10));
     }
 }
 

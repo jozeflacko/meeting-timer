@@ -1,6 +1,6 @@
 <template>
     <div class="container">      
-      <!--v-bind:style="{ background: person && person.favoriteColor }"-->
+      <!--v-bind:style="{ background: person && person.favoriteColor }"-->   
         <img 
             class="image"
             v-if="person.name !== ''"
@@ -15,7 +15,17 @@
           <div class="general-info">
             <div class="time-limit">
               <label>Time Limit for each of  <strong>{{numberOfParticipants}} participants</strong> is: </label>
-              <input v-model="timeLimit" class="time-per-person"/>
+              <!--
+              <input 
+                v-model="timeLimit"
+                class="time-per-person"
+              />
+              -->
+                <vue-timepicker
+                v-model="timeLimitPicker"      
+                format="mm:ss"
+                :second-interval="30"
+              ></vue-timepicker>
             </div>
 
             <div class="duration-container" >         
@@ -50,8 +60,15 @@ import Stopwatch, { StopwatchCallback } from '../factories/Stopwatch';
 import TimeUtils from '../utils/TimeUtils';
 import Person from '../interfaces/Person';
 import PersonService from '../services/PersonService';
+import { CHANGE_TIME_LIMIT } from '../store';
+import VueTimepicker from 'vue2-timepicker';
 
-@Component
+
+@Component({
+  components: {
+    VueTimepicker,
+  },
+})
 export default class HeadPool extends Vue {
   @Prop() private person!: Person;
   @Prop() private timeLimitInSeconds!: number;
@@ -80,8 +97,20 @@ export default class HeadPool extends Vue {
   get overtimeTimeInHHmmss(): string {    
       return TimeUtils.getOvertimeInHHmmss(Number(this.person.currentTimeInSeconds), this.timeLimitInSeconds, true);
   }
-  get timeLimit(): string {
+
+  get timeLimitPicker(): any {
+    return TimeUtils.fromNonNaturalHHmmssToTimeObject(this.$store.state.timeLimit);    
+  }
+  set timeLimitPicker(newTimeLimit: any): void {
+    //console.log(newValue);
+    if(newTimeLimit && newTimeLimit.mm)
+      this.$store.commit(CHANGE_TIME_LIMIT, '00:'+newTimeLimit.mm + ':' + newTimeLimit.ss);
+  }
+  get timeLimit(): any {
     return this.$store.state.timeLimit;
+  }
+  set timeLimit(newTimeLimit: string) {
+    this.$store.commit(CHANGE_TIME_LIMIT, newTimeLimit);
   }
   get duration(): number {
     return this.$store.state.duration;
@@ -138,7 +167,7 @@ export default class HeadPool extends Vue {
   }
   .info {
     display:inline-block;
-    padding:2px 2px;
+    padding:0px 2px;
     margin-left:80px;
     height:inherit;
   }  
@@ -166,7 +195,7 @@ export default class HeadPool extends Vue {
     outline:1px solid white;
     line-height:inherit;
     font-size:inherit;
-  }  
+  } 
 
   @keyframes blinker {
     50% {
