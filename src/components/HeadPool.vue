@@ -101,12 +101,12 @@ export default class HeadPool extends Vue {
   get timeLimitPicker(): any {
     return TimeUtils.fromNonNaturalHHmmssToTimeObject(this.$store.state.timeLimit);    
   }
-  set timeLimitPicker(newTimeLimit: any): void {
+  set timeLimitPicker(newTimeLimit: any) {
     //console.log(newValue);
     if(newTimeLimit && newTimeLimit.mm)
       this.$store.commit(CHANGE_TIME_LIMIT, '00:'+newTimeLimit.mm + ':' + newTimeLimit.ss);
   }
-  get timeLimit(): any {
+  get timeLimit(): string {
     return this.$store.state.timeLimit;
   }
   set timeLimit(newTimeLimit: string) {

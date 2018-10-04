@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.2.0/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.6857b6c8453a6724565b3661ae7a2925.js"
+  "/precache-manifest.437d9aa90b7b3d1cf8f8654010740dd6.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "stand-up-manager"});
