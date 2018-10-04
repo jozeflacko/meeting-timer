@@ -94,7 +94,7 @@ export default class StandUp extends Vue {
       duration: this.$store.state.duration,
       timeLimit: this.$store.state.timeLimit,
     };    
-    FirebaseService.sendInformation(state);
+    //FirebaseService.sendInformation(state);
   }
 
   private resetApp(): void { 
@@ -105,7 +105,7 @@ export default class StandUp extends Vue {
       duration: this.$store.state.duration,
       timeLimit: this.$store.state.timeLimit,
     };    
-    FirebaseService.sendInformation(state);
+    //FirebaseService.sendInformation(state);
   }
 
   private addPerson() {

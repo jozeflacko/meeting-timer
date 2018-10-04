@@ -4,7 +4,7 @@ import router from './router';
 import store from './store';
 import './registerServiceWorker';
 import PersonService from './services/PersonService';
-import FirebaseService from './services/FirebaseService';
+//import FirebaseService from './services/FirebaseService';
 
 Vue.config.productionTip = false;
 
@@ -17,5 +17,5 @@ const vue = new Vue({
 const personService: PersonService = new PersonService();
 
 personService.createDefaultPeople();
-FirebaseService.init();
+//FirebaseService.init();
 
