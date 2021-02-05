@@ -11,7 +11,7 @@ export default class FirebaseService {
     private static db: any;
 
     private static config = {
-        apiKey: 'AIzaSyCJelLxh1b2f-EV8lsu-uwvqdYMcoIW5uE',
+        apiKey: '____todo____provide_key_____!!!!!!!!',
         authDomain: 'stand-up-manager.firebaseapp.com',
         databaseURL: 'https://stand-up-manager.firebaseio.com',
         projectId: 'stand-up-manager',
