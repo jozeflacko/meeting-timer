@@ -7,7 +7,7 @@ Firebase for syncing all instances :)
 
 ### Screenshot
 <p style='max-width:360px;'>
-	<img src="https://github.com/jozeflacko/meeting-timer/blob/master/img/index.png?raw=true" alt="Smiley flower">
+	<img src="https://github.com/jozeflacko/meeting-timer/blob/master/img/index.jpg?raw=true" alt="Smiley flower">
 </p> 
 
 ## Authors
